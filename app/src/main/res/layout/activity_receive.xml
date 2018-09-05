@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="ch.bruin.dev.l2.ReceiveActivity">
+
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:text="Received data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hdr_received_data"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"/>
+            <TextView
+                    android:text="Loading data type..."
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rx_data_type"
+                    android:layout_below="@id/hdr_received_data"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="25dp"
+                    android:layout_centerHorizontal="true"/>
+            <TextView
+                    android:text="Data!"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rx_data"
+                    android:layout_below="@id/rx_data_type"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="25dp"
+                    android:layout_centerHorizontal="true"
+                    android:scrollbars="vertical"
+                    android:maxHeight="120dp"
+                    android:fontFamily="monospace"/>
+        </RelativeLayout>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <Button
+                    android:text="Encode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_encode"
+                    android:layout_weight="1" android:onClick="onEncode"/>
+
+            <Button
+                    android:text="Decode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_decode"
+                    android:layout_weight="1" android:onClick="onDecode"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

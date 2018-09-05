@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="ch.bruin.dev.l2.MainActivity">
+
+    <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            app:srcCompat="@drawable/ic_launcher_background"
+            android:id="@+id/img_header"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:scaleType="centerCrop"/>
+
+    <LinearLayout
+            android:layout_marginTop="100dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+        <TextView
+                android:text="L2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:fontFamily="monospace" android:typeface="monospace"
+                android:textSize="128sp"/>
+        <TextView
+                android:text="Security"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:textSize="30sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="50dp">
+        <Button
+                android:text="Send message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/btn_send" android:onClick="onSend"/>
+        <Button
+                android:text="Edit preferences"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/btn_edit_presets" android:enabled="false"/>
+    </LinearLayout>
+
+</RelativeLayout>
