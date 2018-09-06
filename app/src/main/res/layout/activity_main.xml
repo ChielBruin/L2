@@ -39,15 +39,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="50dp">
+            android:layout_marginBottom="50dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginEnd="10dp"
+            android:showDividers="middle"
+            android:divider="@drawable/divider">
         <Button
-                android:text="Send message"
+                android:text="Encrypt message"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/btn_send" android:onClick="onSend"/>
+                android:layout_height="wrap_content" android:id="@+id/btn_encrypt" android:onClick="onSend"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored" android:background="#CCCCCC"/>
+        <Button
+                android:text="Decrypt message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/btn_decrypt" android:enabled="false"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored" android:background="#CCCCCC"/>
         <Button
                 android:text="Edit preferences"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/btn_edit_presets" android:enabled="false"/>
+                android:layout_height="wrap_content" android:id="@+id/btn_edit_presets" android:enabled="false"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored" android:background="#CCCCCC"/>
+        <Button
+                android:text="Crypto for dummies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/btn_tutorial" android:enabled="false"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored" android:background="#CCCCCC"/>
     </LinearLayout>
 
 </RelativeLayout>

@@ -1,7 +1,6 @@
 package ch.bruin.dev.l2.selectorDialog;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,9 +46,8 @@ public class CryptoMethodListAdapter extends ArrayAdapter<CryptoMethod> implemen
         }
     }
 
-    @NonNull
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
         CryptoMethod dataModel = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
