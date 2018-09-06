@@ -1,50 +1,30 @@
 package ch.bruin.dev.l2.Crypto;
 
-import android.content.Context;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import java.security.InvalidKeyException;
 
 public abstract class CryptoMethod {
+    public enum CryptoStrength {
+        NONE,
+        WEAK,
+        STRONG,
+        UNBREAKABLE;
+    }
+
     private String name;
     private int keySize;
-    private String protocol;
+    private String protocolFamily;
     private boolean requiresKey;
-//
-//    public void draw(Context context) {
-//        LinearLayout container = new LinearLayout(context);
-//        container.setOrientation(LinearLayout.HORIZONTAL);
-//
-//
-//    }
 
-    public CryptoMethod(String name, String protocol, int keySize, boolean requiresKey) {
+    public CryptoMethod(String name, String protocolFamily, int keySize, boolean requiresKey) {
+        if (keySize % 8 != 0) throw new IllegalArgumentException("Key size must be a multiple of 8");
         this.name = name;
-        this.protocol = protocol;
         this.keySize = keySize;
         this.requiresKey = requiresKey;
+        this.protocolFamily = protocolFamily;
     }
 
-    public void draw(LinearLayout container, Context c) {
-        RelativeLayout box = new RelativeLayout(c);
-        TextView name = new TextView(c);
-        name.setText(this.name);
-        box.addView(name);
-
-        if (requiresKey) {
-            // show closed lock
-        } else {
-            // show open lock
-        }
-
-        container.addView(box);
-    }
-
-    public abstract byte[] encode(byte[] plaintext,  String key);
-    public abstract byte[] decode(byte[] ciphertext, String key);
+    public abstract byte[] encode(byte[] plaintext,  byte[] key);
+    public abstract byte[] decode(byte[] ciphertext, byte[] key);
 
 
     public byte[] encodeWithoutKey(byte[] plaintext) throws InvalidKeyException {
@@ -66,9 +46,13 @@ public abstract class CryptoMethod {
         return requiresKey;
     }
 
-    public abstract String  getFamily();
+    public String getProtocolFamily() {
+        return protocolFamily;
+    }
 
     public abstract String getShortDescription();
 
     public abstract String getDescription();
+
+    public abstract CryptoStrength getStrength();
 }

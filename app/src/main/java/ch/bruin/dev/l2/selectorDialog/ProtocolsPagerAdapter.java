@@ -24,7 +24,7 @@ public class ProtocolsPagerAdapter extends FragmentPagerAdapter {
         super(fm);
         this.args = bundle;
 
-        presets.add(new StoredCryptoMethod("bob", new RSA(4), "1234"));
+        presets.add(new StoredCryptoMethod("bob", new RSA(32), "1234".getBytes()));
 
         customs.add(new RSA(128));
         customs.add(new RSA(256));

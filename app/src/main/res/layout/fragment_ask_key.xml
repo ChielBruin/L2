@@ -2,7 +2,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content" xmlns:app="http://schemas.android.com/apk/res-auto"
-              tools:context="ch.bruin.dev.l2.selectorDialog.AskKeyFragment"
+              tools:context="ch.bruin.dev.l2.selectorDialog.AskKeyDialog"
               android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->

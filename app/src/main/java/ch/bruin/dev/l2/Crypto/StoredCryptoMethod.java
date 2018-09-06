@@ -1,23 +1,23 @@
 package ch.bruin.dev.l2.Crypto;
 
 public class StoredCryptoMethod extends CryptoMethod {
-    private String key;
+    private byte[] key;
     private CryptoMethod protocol;
 
-    public StoredCryptoMethod(String name, CryptoMethod protocol, String key) {
+    public StoredCryptoMethod(String name, CryptoMethod protocol, byte[] key) {
         super(name, protocol.getName(), protocol.getKeySize(), false);
         this.key = key;
         this.protocol = protocol;
-        if (key.length() != protocol.getKeySize()) throw new IllegalArgumentException("Key size incorrect, expected " + protocol.getKeySize());
+        if (key.length * 8 != protocol.getKeySize()) throw new IllegalArgumentException("Key size incorrect, expected " + protocol.getKeySize());
     }
 
     @Override
-    public byte[] encode(byte[] plaintext, String key) {
+    public byte[] encode(byte[] plaintext, byte[] key) {
         return protocol.encode(plaintext, key);
     }
 
     @Override
-    public byte[] decode(byte[] ciphertext, String key) {
+    public byte[] decode(byte[] ciphertext, byte[] key) {
         return protocol.decode(ciphertext, key);
     }
 
@@ -32,8 +32,12 @@ public class StoredCryptoMethod extends CryptoMethod {
     }
 
     @Override
-    public String getFamily() {
-        return this.getName();
+    public String getProtocolFamily() {
+        String name = this.getName();
+        if (name.length() > 4) {
+            name = name.substring(0, 3);
+        }
+        return name;
     }
 
     @Override
@@ -44,5 +48,10 @@ public class StoredCryptoMethod extends CryptoMethod {
     @Override
     public String getDescription() {
         return protocol.getDescription();
+    }
+
+    @Override
+    public CryptoStrength getStrength() {
+        return protocol.getStrength();
     }
 }
