@@ -30,4 +30,19 @@ public class StoredCryptoMethod extends CryptoMethod {
     public byte[] decodeWithoutKey(byte[] ciphertext) {
         return protocol.decode(ciphertext, key);
     }
+
+    @Override
+    public String getFamily() {
+        return this.getName();
+    }
+
+    @Override
+    public String getShortDescription() {
+        return protocol.getShortDescription();
+    }
+
+    @Override
+    public String getDescription() {
+        return protocol.getDescription();
+    }
 }

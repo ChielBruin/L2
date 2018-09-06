@@ -65,4 +65,10 @@ public abstract class CryptoMethod {
     public boolean requiresKey() {
         return requiresKey;
     }
+
+    public abstract String  getFamily();
+
+    public abstract String getShortDescription();
+
+    public abstract String getDescription();
 }

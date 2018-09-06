@@ -8,10 +8,13 @@ import ch.bruin.dev.l2.Crypto.CryptoMethod;
 import ch.bruin.dev.l2.Crypto.RSA;
 import ch.bruin.dev.l2.Crypto.StoredCryptoMethod;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class ProtocolsPagerAdapter extends FragmentPagerAdapter {
 
-    private CryptoMethod[] presets = {new StoredCryptoMethod("bob", new RSA(4), "1234")};
-    private CryptoMethod[] customs = {new RSA(128), new RSA(256), new RSA(5)};
+    private ArrayList<CryptoMethod> presets = new ArrayList<>();
+    private ArrayList<CryptoMethod> customs = new ArrayList<>();
 
     Bundle args;
     String [] titles;
@@ -20,6 +23,12 @@ public class ProtocolsPagerAdapter extends FragmentPagerAdapter {
     public ProtocolsPagerAdapter(FragmentManager fm, Bundle bundle) {
         super(fm);
         this.args = bundle;
+
+        presets.add(new StoredCryptoMethod("bob", new RSA(4), "1234"));
+
+        customs.add(new RSA(128));
+        customs.add(new RSA(256));
+        customs.add(new RSA(8));
     }
 
     @Override

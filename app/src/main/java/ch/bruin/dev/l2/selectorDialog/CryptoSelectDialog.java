@@ -12,7 +12,6 @@ import android.widget.TabHost;
 import ch.bruin.dev.l2.Crypto.CryptoMethod;
 import ch.bruin.dev.l2.CryptoMethodListenerActivity;
 import ch.bruin.dev.l2.R;
-import ch.bruin.dev.l2.ReceiveActivity;
 
 import java.io.Serializable;
 
