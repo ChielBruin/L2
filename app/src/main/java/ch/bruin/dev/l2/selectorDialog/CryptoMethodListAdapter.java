@@ -1,8 +1,6 @@
 package ch.bruin.dev.l2.selectorDialog;
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +12,7 @@ import ch.bruin.dev.l2.R;
 
 import java.util.ArrayList;
 
-public class CryptoMethodListAdapter extends ArrayAdapter<CryptoMethod> implements View.OnClickListener {
+public class CryptoMethodListAdapter extends ArrayAdapter<CryptoMethod> {
 
     Context mContext;
 
@@ -28,22 +26,6 @@ public class CryptoMethodListAdapter extends ArrayAdapter<CryptoMethod> implemen
     public CryptoMethodListAdapter(ArrayList<CryptoMethod> data, Context context) {
         super(context, R.layout.fragment_item, data);
         this.mContext=context;
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        int position=(Integer) v.getTag();
-        Object object= getItem(position);
-        CryptoMethod dataModel=(CryptoMethod) object;
-        Log.wtf("AAAAA", ""+v.getId());
-        switch (v.getId())
-        {
-            case R.id.container:
-                Snackbar.make(v, "Release date " + dataModel.getDescription(), Snackbar.LENGTH_LONG)
-                        .setAction("No action", null).show();
-                break;
-        }
     }
 
     @Override
