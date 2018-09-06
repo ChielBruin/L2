@@ -29,7 +29,6 @@
             android:layout_alignParentEnd="true"/>
     <ImageView
             android:layout_height="16dp"
-            app:srcCompat="@android:drawable/ic_secure"
             android:id="@+id/img_strength"
             android:scaleType="fitStart"
             android:cropToPadding="true"

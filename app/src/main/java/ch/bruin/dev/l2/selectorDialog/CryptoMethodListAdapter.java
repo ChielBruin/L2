@@ -68,10 +68,29 @@ public class CryptoMethodListAdapter extends ArrayAdapter<CryptoMethod> implemen
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.txtFamily.setText(dataModel.getFamily());
+        viewHolder.txtFamily.setText(dataModel.getProtocolFamily());
         viewHolder.txtDescription.setText(dataModel.getShortDescription());
-        // Return the completed view to render on screen
 
+        int img_id;
+        switch(dataModel.getStrength()) {
+            case NONE:
+                img_id = R.drawable.ic_thumb_down_black;
+                break;
+            case WEAK:
+                img_id = R.drawable.ic_lock_open_black;
+                break;
+            case STRONG:
+                img_id = R.drawable.ic_lock_outline_black;
+                break;
+            case UNBREAKABLE:
+                img_id = R.drawable.ic_lock_black;
+                break;
+            default:
+                img_id = R.drawable.ic_report_problem_black;
+
+        }
+
+        viewHolder.imgStrength.setBackgroundResource(img_id);
         return convertView;
     }
 }
