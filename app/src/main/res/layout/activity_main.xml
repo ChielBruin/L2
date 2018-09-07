@@ -27,7 +27,8 @@
                 android:text="L2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:fontFamily="monospace" android:typeface="monospace"
-                android:textSize="128sp"/>
+                android:textSize="128sp"
+                android:layout_marginStart="15dp"/>
         <TextView
                 android:text="sec"
                 android:layout_width="wrap_content"
@@ -45,25 +46,42 @@
             android:showDividers="middle"
             android:divider="@drawable/divider">
         <Button
-                android:text="Encrypt message"
+                android:text="New message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/btn_encrypt" android:onClick="onSend"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored" android:background="#CCCCCC"/>
-        <Button
-                android:text="Decrypt message"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/btn_decrypt" android:enabled="false"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored" android:background="#CCCCCC"/>
-        <Button
+       <Button
                 android:text="Edit preferences"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/btn_edit_presets" android:enabled="false"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored" android:background="#CCCCCC"/>
-        <Button
-                android:text="Crypto for dummies"
+
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/btn_tutorial" android:enabled="false"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored" android:background="#CCCCCC"/>
+                android:layout_height="wrap_content"
+                android:showDividers="middle"
+                android:divider="@drawable/divider">
+            <Button
+                    android:text="Crypto for dummies"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/btn_tutorial"
+                    android:enabled="false"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:background="#CCCCCC"
+                    android:layout_weight="1" android:textSize="11sp"/>
+            <Button
+                    android:text="About"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/btn_about"
+                    android:enabled="false"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:background="#CCCCCC"
+                    android:layout_weight="1" android:textSize="11sp"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -25,12 +25,13 @@
         <Switch
                 android:text="Text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/swt_display_mode"
+                android:layout_height="wrap_content"
+                android:id="@+id/swt_display_mode"
         />
         <TextView
                 android:text="Binary"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:textAppearance="@android:style/TextAppearance.Material"
         />
     </LinearLayout>
