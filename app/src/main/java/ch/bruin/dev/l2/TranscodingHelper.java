@@ -40,9 +40,7 @@ public class TranscodingHelper {
     }
 
     public void encode(byte[] plaintext) {
-        CryptoSelectDialog newFragment = new CryptoSelectDialog();
-        newFragment.setCallback(this);
-        newFragment.show(rootActivity.getSupportFragmentManager(), "dialog");
+        showSelectionDialog();
         this.currentMode = TranscodingMode.ENCODE;
         this.data = plaintext;
     }
@@ -66,11 +64,16 @@ public class TranscodingHelper {
     }
 
     public void decode(byte[] ciphertext) {
-        CryptoSelectDialog newFragment = new CryptoSelectDialog();
-        newFragment.setCallback(this);
-        newFragment.show(rootActivity.getSupportFragmentManager(), "dialog");
+        showSelectionDialog();
         this.currentMode = TranscodingMode.DECODE;
         this.data = ciphertext;
+    }
+
+    private void showSelectionDialog() {
+        CryptoSelectDialog newFragment = new CryptoSelectDialog();
+        newFragment.setCallback(this);
+        newFragment.setParentActivity(rootActivity);
+        newFragment.show(rootActivity.getSupportFragmentManager(), "dialog");
     }
 
     public void decodeString(String ciphertext) {

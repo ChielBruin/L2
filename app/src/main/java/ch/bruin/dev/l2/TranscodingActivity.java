@@ -80,7 +80,7 @@ public abstract class TranscodingActivity extends AppCompatActivity implements T
 
     private void updateTextView() {
         if (data == null || data.length == 0) {
-            dataView.setText("EMPTY DATA");
+            dataView.setText("");
             return;
         }
 
