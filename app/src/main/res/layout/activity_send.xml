@@ -62,7 +62,7 @@
             android:layout_below="@id/switcher"
             android:layout_above="@id/buttonbar"
             android:inputType="textLongMessage"
-            android:text="Type here"
+            android:hint="Type here"
             android:ems="10"
             android:id="@+id/textField"/>
 
