@@ -107,7 +107,7 @@ public abstract class TranscodingActivity extends AppCompatActivity implements T
         this.data = result;
 
         if (mode == TranscodingMode.ENCODE) {
-            String query = "Select how youwould like to send the data";
+            String query = "Select how you would like to send the data";
             BinaryDialogWrapper.ask(this, query, "Text", "File", new BinaryDialogListener<byte[]>() {
                 Intent sendIntent = new Intent();
                 { sendIntent.setAction(Intent.ACTION_SEND); }
