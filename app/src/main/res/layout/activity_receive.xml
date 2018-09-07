@@ -8,49 +8,57 @@
         tools:context="ch.bruin.dev.l2.ReceiveActivity">
 
 
-    <LinearLayout
-            android:orientation="vertical"
+    <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            android:layout_height="match_parent">
 
+        <TextView
+                android:text="Received data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/hdr_received_data"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_below="@+id/hdr_received_data"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/switcher">
+            <Switch
+                    android:text="Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/swt_display_mode"
+            />
             <TextView
-                    android:text="Received data"
+                    android:text="Binary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/hdr_received_data"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"/>
-            <TextView
-                    android:text="Loading data type..."
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/rx_data_type"
-                    android:layout_below="@id/hdr_received_data"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="25dp"
-                    android:layout_centerHorizontal="true"/>
-            <TextView
-                    android:text="Data!"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/rx_data"
-                    android:layout_below="@id/rx_data_type"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="25dp"
-                    android:layout_centerHorizontal="true"
-                    android:scrollbars="vertical"
-                    android:maxHeight="120dp"
-                    android:fontFamily="monospace"/>
-        </RelativeLayout>
+                    android:textAppearance="@android:style/TextAppearance.Material"
+            />
+        </LinearLayout>
+
+        <TextView
+                android:text="Data!"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rx_data"
+                android:layout_below="@id/switcher"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="25dp"
+                android:layout_centerHorizontal="true"
+                android:scrollbars="vertical"
+                android:maxHeight="120dp"
+                android:fontFamily="monospace"/>
 
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
 
             <Button
                     android:text="Encode"
@@ -68,6 +76,5 @@
                     android:layout_weight="1" android:onClick="onDecode"
                     style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
         </LinearLayout>
-
-    </LinearLayout>
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

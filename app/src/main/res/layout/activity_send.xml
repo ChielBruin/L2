@@ -16,6 +16,26 @@
 
     <LinearLayout
             android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_alignBottom="@+id/title"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/switcher">
+        <Switch
+                android:text="Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/swt_display_mode"
+        />
+        <TextView
+                android:text="Binary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Material"
+        />
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:id="@+id/buttonbar"
             android:layout_height="wrap_content"
@@ -38,7 +58,7 @@
     <EditText
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@id/title"
+            android:layout_below="@id/switcher"
             android:layout_above="@id/buttonbar"
             android:inputType="textLongMessage"
             android:text="Type here"

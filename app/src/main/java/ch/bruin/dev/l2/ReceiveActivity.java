@@ -4,9 +4,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import ch.bruin.dev.l2.Crypto.CryptoMethod;
 import ch.bruin.dev.l2.selectorDialog.BinaryDialogListener;
@@ -22,11 +23,23 @@ public class ReceiveActivity  extends AppCompatActivity implements TransCodingCa
     private TranscodingHelper helper;
     private byte[] rx_data;
 
+    private TextView textView;
+    private Switch swtDisplayMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receive);
+
         this.helper = new TranscodingHelper(this, this);
+        this.textView = findViewById(R.id.rx_data);
+        this.swtDisplayMode = findViewById(R.id.swt_display_mode);
+
+        swtDisplayMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                updateTextField();
+            }
+        });
 
         // Get intent, action and MIME type
         Intent intent = getIntent();
@@ -49,32 +62,47 @@ public class ReceiveActivity  extends AppCompatActivity implements TransCodingCa
             // Handle other intents, such as being started from the home screen
         }
 
+        updateTextField();
+    }
+
+    private void updateTextField() {
+
         if (rx_data == null || rx_data.length == 0) {
-            ((TextView) findViewById(R.id.rx_data)).setText("EMPTY DATA");
-        } else {
-            BinaryDialogWrapper.ask(this, "How should we display the data", "Text", "Binary", new BinaryDialogListener<byte[]>() {
-                @Override
-                public void dialogResult(byte[] data, boolean positive) {
-                    TextView dataView = (TextView) findViewById(R.id.rx_data);
-                    String text;
-                    if (positive) {
-                        text = new String(data);
-                    } else {
-                        text = TranscodingHelper.toBase64(data);
-                    }
-                    dataView.setText(text);
-                    dataView.setMovementMethod(new ScrollingMovementMethod());
-                    ((TextView) findViewById(R.id.rx_data_type)).setText(positive ? "plain" : "binary");
-                }
-            }, rx_data);
+            textView.setText("EMPTY DATA");
+            return;
         }
+
+        String text;
+        if (swtDisplayMode.isChecked()) {
+            text = TranscodingHelper.toBase64(rx_data);
+        } else {
+            text = new String(rx_data);;
+        }
+        textView.setText(text);
     }
 
     private byte[] handleSendText(Intent intent) {
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
         if (sharedText != null) {
-            // Update UI to reflect text being shared
-            return sharedText.getBytes();
+            //If its valid Base64 it can be both, otherwise it must be plaintext
+            if (sharedText.matches("[A-Za-z0-1_-]+")) {
+                String query = "We are not sure what kind of data this is, please select the correct data type.";
+                BinaryDialogWrapper.ask(this, query, "text", "binary", new BinaryDialogListener<String>() {
+                    @Override
+                    public void dialogResult(String data, boolean positive) {
+                        if (positive) {
+                            rx_data = data.getBytes();
+                            swtDisplayMode.setChecked(true);
+                        } else {
+                            rx_data = TranscodingHelper.fromBase64(data);
+                            swtDisplayMode.setChecked(false);
+                        }
+                        updateTextField();
+                    }
+                }, sharedText);
+            } else {
+                return sharedText.getBytes();
+            }
         }
         return null;
     }
@@ -134,37 +162,28 @@ public class ReceiveActivity  extends AppCompatActivity implements TransCodingCa
 
         if (mode == TranscodingMode.ENCODE) {
             String query = "Select how we should send the data";
-            BinaryDialogWrapper.ask(this, query, "Text", "Binary", new BinaryDialogListener<byte[]>() {
+            BinaryDialogWrapper.ask(this, query, "Text", "File", new BinaryDialogListener<byte[]>() {
                 @Override
                 public void dialogResult(byte[] data, boolean positive) {
                     Intent sendIntent = new Intent();
                     sendIntent.setAction(Intent.ACTION_SEND);
                     if (positive) {
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, TranscodingHelper.toBase64(data));
+                        if (swtDisplayMode.isChecked()) {
+                            sendIntent.putExtra(Intent.EXTRA_TEXT, TranscodingHelper.toBase64(data));
+                        } else {
+                            sendIntent.putExtra(Intent.EXTRA_TEXT, new String(data));
+                        }
                     } else {
                         //TODO
-                        Log.e("ReceiveSendAction", "Binary data not yet supported");
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, new String(data));
+                        Log.e("ReceiveSendAction", "Binary data file not yet supported, using Base64 instead");
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, TranscodingHelper.toBase64(data));
                     }
                     sendIntent.setType("text/plain");
                     startActivity(sendIntent);
                 }
             }, rx_data);
         } else if (mode == TranscodingMode.DECODE) {
-            String query = "Select how we should display the data";
-            BinaryDialogWrapper.ask(this, query, "Text", "Binary", new BinaryDialogListener<byte[]>() {
-                @Override
-                public void dialogResult(byte[] data, boolean positive) {
-                    String result;
-                    if (positive) {
-                        result = new String(data);
-                    } else {
-                        result = TranscodingHelper.toBase64(data);
-                    }
-                    ((TextView) findViewById(R.id.rx_data)).setText(result);
-                    ((TextView) findViewById(R.id.rx_data_type)).setText("Result");
-                }
-            }, rx_data);
+            updateTextField();
         }
     }
 }
