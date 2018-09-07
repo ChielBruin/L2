@@ -1,57 +1,31 @@
 package ch.bruin.dev.l2;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.EditText;
-import ch.bruin.dev.l2.Crypto.CryptoMethod;
-import ch.bruin.dev.l2.selectorDialog.BinaryDialogListener;
-import ch.bruin.dev.l2.selectorDialog.BinaryDialogWrapper;
+import android.text.Editable;
+import android.text.TextWatcher;
 
-public class SendActivity extends AppCompatActivity implements TransCodingCallback {
-
-    private TranscodingHelper helper;
+public class SendActivity extends TranscodingActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send);
-        this.helper = new TranscodingHelper(this, this);
-    }
 
-    public void onEncode(View view) {
-        String plaintext = ((EditText)findViewById(R.id.textField)).getText().toString();
-        helper.encodeString(plaintext);
-    }
+        this.setButtons(R.id.btn_encode, R.id.btn_decode);
+        this.setDataView(R.id.textField);
+        this.setSwitch(R.id.swt_display_mode);
 
-    public void onDecode(View view) {
-        String ciphertext = ((EditText)findViewById(R.id.textField)).getText().toString();
-        helper.decodeString(ciphertext);
-    }
+        this.dataView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
-    @Override
-    public void onTranscodeFinish(TranscodingMode mode, byte[] original, CryptoMethod method, byte[] result) {
-        if (mode == TranscodingMode.ENCODE) {
-            String b64ciphertext = TranscodingHelper.toBase64(result);
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, b64ciphertext);
-            sendIntent.setType("text/plain");
-            startActivity(sendIntent);
-        } else if (mode == TranscodingMode.DECODE) {
-            BinaryDialogWrapper.ask(this, "How would you like to display the result?", "Text", "Binary", new BinaryDialogListener<byte[]>() {
-                @Override
-                public void dialogResult(byte[] data, boolean positive) {
-                    String result;
-                    if (positive) {
-                        result = new String(data);
-                    } else {
-                        result = TranscodingHelper.toBase64(data);
-                    }
-                    ((EditText) findViewById(R.id.textField)).setText(result);
-                }
-            }, result);
-        }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                setData(dataView.getText().toString(), !swt.isChecked());
+            }
+        });
     }
 }

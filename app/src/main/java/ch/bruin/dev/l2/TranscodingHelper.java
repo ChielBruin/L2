@@ -8,7 +8,7 @@ import ch.bruin.dev.l2.selectorDialog.CryptoSelectDialog;
 
 import java.security.InvalidKeyException;
 
-import ch.bruin.dev.l2.TransCodingCallback.TranscodingMode;
+import ch.bruin.dev.l2.TranscodingCallback.TranscodingMode;
 
 public class TranscodingHelper {
 
@@ -16,11 +16,11 @@ public class TranscodingHelper {
     private byte[] data;
 
     private final AppCompatActivity rootActivity;
-    private final TransCodingCallback callback;
+    private final TranscodingCallback callback;
 
     private static final int B64_FLAGS = Base64.NO_WRAP + Base64.URL_SAFE;
 
-    public TranscodingHelper(TransCodingCallback callback, AppCompatActivity activity) {
+    public TranscodingHelper(TranscodingCallback callback, AppCompatActivity activity) {
         this.callback = callback;
         this.rootActivity = activity;
         this.currentMode = TranscodingMode.NONE;

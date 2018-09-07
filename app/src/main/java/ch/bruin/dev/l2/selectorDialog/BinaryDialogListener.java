@@ -1,5 +1,6 @@
 package ch.bruin.dev.l2.selectorDialog;
 
 public interface BinaryDialogListener<T> {
-    public void dialogResult(T data, boolean positive);
+    public void dialogPositiveResult(T data, String option);
+    public void dialogNegativeResult(T data, String option);
 }
