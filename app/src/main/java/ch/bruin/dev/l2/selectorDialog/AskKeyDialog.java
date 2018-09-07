@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,17 +14,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import ch.bruin.dev.l2.Crypto.CryptoMethod;
 import ch.bruin.dev.l2.Crypto.StoredCryptoMethod;
-import ch.bruin.dev.l2.CryptoMethodListenerActivity;
 import ch.bruin.dev.l2.R;
+import ch.bruin.dev.l2.TranscodingHelper;
 
 public class AskKeyDialog extends Dialog implements View.OnClickListener {
     private final CryptoMethod method;
-    public CryptoMethodListenerActivity parentActivity;
+    private final TranscodingHelper callback;
 
-    public AskKeyDialog(CryptoMethodListenerActivity a, CryptoMethod method) {
+    public AskKeyDialog(CryptoMethod method, TranscodingHelper callback, AppCompatActivity a) {
         super(a);
-        this.parentActivity = a;
         this.method = method;
+        this.callback = callback;
     }
 
     @Override
@@ -69,7 +70,7 @@ public class AskKeyDialog extends Dialog implements View.OnClickListener {
                 byte[] password = ((TextInputEditText) findViewById(R.id.passwordField)).getText().toString().getBytes();
                 if (password.length * 8 == method.getKeySize()) {
                     this.dismiss();
-                    parentActivity.onMethodSelected(new StoredCryptoMethod(method.getName(), method, password));
+                    callback.onMethodSelected(new StoredCryptoMethod(method.getName(), method, password));
                 } else {
                     // The size check is enforced, so this should not happen
                     Log.wtf("KeyDialog", "Entered key is the wrong size");

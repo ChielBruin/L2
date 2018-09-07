@@ -5,21 +5,19 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import ch.bruin.dev.l2.Crypto.CryptoMethod;
-import ch.bruin.dev.l2.selectorDialog.CryptoSelectDialog;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.InvalidKeyException;
 import java.util.ArrayList;
 
-public class ReceiveActivity extends CryptoMethodListenerActivity {
+public class ReceiveActivity  extends AppCompatActivity implements TransCodingCallback  {
 
     private class Data {
         public byte[] data;
@@ -36,11 +34,11 @@ public class ReceiveActivity extends CryptoMethodListenerActivity {
 
         public String toReadable() {
             if (data == null) return "";
-            return Base64.encodeToString(data, B64_FLAGS);
+            return TranscodingHelper.toBase64(data);
         }
 
         public void setText(String text) {
-            this.data = Base64.decode(text,B64_FLAGS);
+            this.data = TranscodingHelper.fromBase64(text);
         }
 
         public void setRaw(byte[] data) {
@@ -48,77 +46,15 @@ public class ReceiveActivity extends CryptoMethodListenerActivity {
         }
     }
 
-
-    private static final int B64_FLAGS = Base64.NO_WRAP + Base64.URL_SAFE;
     private boolean currentModeEncode = false;
     private Data rx_data;
-
-
-    public void onMethodSelected(CryptoMethod method) {
-        Log.i("Protocol", "Selected protocol " + method.getName());
-        try {
-            if (currentModeEncode) {
-                rx_data.result = method.encodeWithoutKey(rx_data.data);
-            } else {
-                rx_data.result = method.decodeWithoutKey(rx_data.data);
-            }
-        } catch (InvalidKeyException e) {
-            Log.e("Protocol", "Received protocol still requires a key, this should never happen");
-            throw new IllegalArgumentException("Key not set");
-        }
-
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                switch (i){
-                    case DialogInterface.BUTTON_POSITIVE:
-                        displayResult(true);
-                        break;
-
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        displayResult(false);
-                        break;
-                }
-            }
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Select how we should " + (currentModeEncode ? "send" : "display") + " the data").setPositiveButton("Text", dialogClickListener)
-                .setNegativeButton("Binary", dialogClickListener).show();
-    }
-
-    private void displayResult(boolean plaintext) {
-        if (currentModeEncode) {
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            if (plaintext) {
-                sendIntent.putExtra(Intent.EXTRA_TEXT, Base64.encodeToString(rx_data.data, B64_FLAGS));
-            } else {
-                //TODO
-                Log.e("ReceiveSendAction", "Binary data not yet supported");
-                sendIntent.putExtra(Intent.EXTRA_TEXT, new String(rx_data.data));
-            }
-            sendIntent.setType("text/plain");
-            startActivity(sendIntent);
-        } else {
-            String result;
-            if (plaintext) {
-                result = new String(rx_data.data);
-            } else {
-                result = Base64.encodeToString(rx_data.data, B64_FLAGS);
-            }
-            ((TextView) findViewById(R.id.rx_data)).setText(result);
-            ((TextView) findViewById(R.id.rx_data_type)).setText("Result");
-
-            rx_data.setRaw(rx_data.result);
-            rx_data.result = null;
-        }
-    }
+    private TranscodingHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receive);
+        this.helper = new TranscodingHelper(this, this);
 
         // Get intent, action and MIME type
         Intent intent = getIntent();
@@ -203,19 +139,63 @@ public class ReceiveActivity extends CryptoMethodListenerActivity {
 
     public void onEncode(View v) {
         this.currentModeEncode = true;
-        CryptoSelectDialog newFragment = new CryptoSelectDialog();
-        newFragment.setParentActivity(this);
-        newFragment.show(getSupportFragmentManager(), "dialog");
-//        CryptoSelectDialog dialog = new CryptoSelectDialog(this, CryptoSelectDialog.ENCODE);
-//        dialog.show();
+        this.helper.encode(rx_data.data);
     }
 
     public void onDecode(View v) {
         this.currentModeEncode = false;
-        CryptoSelectDialog newFragment = new CryptoSelectDialog();
-        newFragment.setParentActivity(this);
-        newFragment.show(getSupportFragmentManager(), "dialog");
-//        CryptoSelectDialog dialog = new CryptoSelectDialog(this, CryptoSelectDialog.DECODE);
-//        dialog.show();
+        this.helper.decode(rx_data.data);
     }
+
+    @Override
+    public void onTranscodeFinish(byte[] original, CryptoMethod method, byte[] result) {
+        rx_data.result = result;
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                switch (i){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        displayResult(true);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        displayResult(false);
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Select how we should " + (currentModeEncode ? "send" : "display") + " the data").setPositiveButton("Text", dialogClickListener)
+                .setNegativeButton("Binary", dialogClickListener).show();
+    }
+
+    private void displayResult(boolean plaintext) {
+        if (currentModeEncode) {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            if (plaintext) {
+                sendIntent.putExtra(Intent.EXTRA_TEXT, rx_data.toReadable());
+            } else {
+                //TODO
+                Log.e("ReceiveSendAction", "Binary data not yet supported");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, new String(rx_data.data));
+            }
+            sendIntent.setType("text/plain");
+            startActivity(sendIntent);
+        } else {
+            String result;
+            if (plaintext) {
+                result = new String(rx_data.data);
+            } else {
+                result = rx_data.toReadable();
+            }
+            ((TextView) findViewById(R.id.rx_data)).setText(result);
+            ((TextView) findViewById(R.id.rx_data_type)).setText("Result");
+
+            rx_data.setRaw(rx_data.result);
+            rx_data.result = null;
+        }
+    }
+
 }

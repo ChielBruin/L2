@@ -9,7 +9,6 @@ import ch.bruin.dev.l2.Crypto.RSA;
 import ch.bruin.dev.l2.Crypto.StoredCryptoMethod;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ProtocolsPagerAdapter extends FragmentPagerAdapter {
 

@@ -5,18 +5,20 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
 import ch.bruin.dev.l2.Crypto.CryptoMethod;
-import ch.bruin.dev.l2.CryptoMethodListenerActivity;
 import ch.bruin.dev.l2.R;
+import ch.bruin.dev.l2.TranscodingHelper;
 
 import java.io.Serializable;
 
 public class CryptoSelectDialog extends DialogFragment implements Serializable {
-    private CryptoMethodListenerActivity parentActivity;
+    private TranscodingHelper callback;
+    private AppCompatActivity parentActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,14 +67,18 @@ public class CryptoSelectDialog extends DialogFragment implements Serializable {
     public void onMethodSelected(CryptoMethod method) {
         this.dismiss();
         if (method.requiresKey()) {
-            AskKeyDialog dialog = new AskKeyDialog(parentActivity, method);
+            AskKeyDialog dialog = new AskKeyDialog(method, callback, parentActivity);
             dialog.show();
         } else {
-            parentActivity.onMethodSelected(method);
+            callback.onMethodSelected(method);
         }
     }
 
-    public void setParentActivity(CryptoMethodListenerActivity parentActivity) {
+    public void setParentActivity(AppCompatActivity parentActivity) {
         this.parentActivity = parentActivity;
+    }
+
+    public void setCallback(TranscodingHelper callback) {
+        this.callback = callback;
     }
 }
