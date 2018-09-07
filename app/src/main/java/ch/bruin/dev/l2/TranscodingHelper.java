@@ -8,13 +8,9 @@ import ch.bruin.dev.l2.selectorDialog.CryptoSelectDialog;
 
 import java.security.InvalidKeyException;
 
-public class TranscodingHelper {
+import ch.bruin.dev.l2.TransCodingCallback.TranscodingMode;
 
-    private enum TranscodingMode {
-        ENCODE,
-        DECODE,
-        NONE;
-    }
+public class TranscodingHelper {
 
     private TranscodingMode currentMode;
     private byte[] data;
@@ -78,17 +74,17 @@ public class TranscodingHelper {
     }
 
     public void decodeString(String ciphertext) {
-        this.encode(ciphertext.getBytes());
+        this.decode(ciphertext.getBytes());
     }
 
     public void onMethodSelected(CryptoMethod method) {
         Log.i("Protocol", "Selected protocol " + method.getName());
         switch (this.currentMode) {
             case ENCODE:
-                callback.onTranscodeFinish(data, method, this.encode(data, method));
+                callback.onTranscodeFinish(this.currentMode, data, method, this.encode(data, method));
                 break;
             case DECODE:
-                callback.onTranscodeFinish(data, method, this.decode(data, method));
+                callback.onTranscodeFinish(this.currentMode, data, method, this.decode(data, method));
                 break;
             default:
                 throw new IllegalStateException("Received callback but no request is pending");
@@ -98,7 +94,7 @@ public class TranscodingHelper {
     }
 
     public static byte[] fromBase64(String b64) {
-        return Base64.encode(b64.getBytes(), B64_FLAGS);
+        return Base64.decode(b64.getBytes(), B64_FLAGS);
     }
 
     public static String stringFromBase64(String b64) {
@@ -106,6 +102,6 @@ public class TranscodingHelper {
     }
 
     public static String toBase64(byte[] data) {
-        return new String(Base64.decode(data, B64_FLAGS));
+        return new String(Base64.encode(data, B64_FLAGS));
     }
 }

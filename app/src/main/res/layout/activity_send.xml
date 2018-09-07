@@ -14,19 +14,32 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Display2"/>
 
-    <Button
-            android:text="Send text"
+    <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
+            android:id="@+id/buttonbar"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_continue"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true" android:onClick="onSend"/>
+            android:layout_alignParentEnd="true">
+        <Button
+                android:text="Encode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_encode"
+                android:onClick="onEncode" android:layout_weight="1"/>
+        <Button
+                android:text="Decode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_decode"
+                android:onClick="onDecode" android:layout_weight="1"/>
+    </LinearLayout>
 
     <EditText
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_below="@id/title"
-            android:layout_above="@id/btn_continue"
+            android:layout_above="@id/buttonbar"
             android:inputType="textLongMessage"
             android:text="Type here"
             android:ems="10"
