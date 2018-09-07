@@ -30,6 +30,7 @@ public class SendActivity extends TranscodingActivity {
                 //TODO: remove the need for the next line
                 if (swt.isChecked()) {
                     Log.i("Base64 Edit", "Operation not implemented yet");
+                    return;
                 };
                 setData(dataView.getText().toString().trim(), !swt.isChecked());
             }
