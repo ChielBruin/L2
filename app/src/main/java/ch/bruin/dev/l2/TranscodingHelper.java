@@ -18,7 +18,7 @@ public class TranscodingHelper {
     private final AppCompatActivity rootActivity;
     private final TranscodingCallback callback;
 
-    private static final int B64_FLAGS = Base64.NO_WRAP + Base64.URL_SAFE;
+    private static final int B64_FLAGS = Base64.URL_SAFE + Base64.NO_PADDING;
 
     public TranscodingHelper(TranscodingCallback callback, AppCompatActivity activity) {
         this.callback = callback;

@@ -2,6 +2,7 @@ package ch.bruin.dev.l2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -84,12 +85,21 @@ public abstract class TranscodingActivity extends AppCompatActivity implements T
         }
 
         String text;
-        if (swt.isChecked()) {
-            text = TranscodingHelper.toBase64(data);
-        } else {
-            text = new String(data);
+        try {
+            if (swt.isChecked()) {
+                text = TranscodingHelper.toBase64(data);
+            } else {
+                text = new String(data);
+            }
+
+            // Do not update if nothing changed
+            if (dataView.getText().toString().equals(text)) return;
+            dataView.setText(text);
+        } catch (IllegalArgumentException ex) {
+            Log.e("SwitchConversion", "Conversion failed, ignoring input");
+            Snackbar.make(dataView, "Invalid Base64 notation", Snackbar.LENGTH_LONG).show();
+            swt.setChecked(!swt.isChecked());
         }
-        dataView.setText(text);
     }
 
     @Override
@@ -105,9 +115,9 @@ public abstract class TranscodingActivity extends AppCompatActivity implements T
                 @Override
                 public void dialogPositiveResult(byte[] data, String option) {
                     if (swt.isChecked()) {
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, TranscodingHelper.toBase64(data));
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, TranscodingHelper.toBase64(data).trim());
                     } else {
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, new String(data));
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, new String(data).trim());
                     }
                     sendIntent();
                 }
@@ -116,7 +126,7 @@ public abstract class TranscodingActivity extends AppCompatActivity implements T
                 public void dialogNegativeResult(byte[] data, String option) {
                     //TODO
                     Log.e("ReceiveSendAction", "Binary data file not yet supported, using Base64 instead");
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, TranscodingHelper.toBase64(data));
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, TranscodingHelper.toBase64(data).trim());
                     sendIntent();
                 }
 

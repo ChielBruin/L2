@@ -3,6 +3,7 @@ package ch.bruin.dev.l2;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 
 public class SendActivity extends TranscodingActivity {
 
@@ -15,6 +16,8 @@ public class SendActivity extends TranscodingActivity {
         this.setDataView(R.id.textField);
         this.setSwitch(R.id.swt_display_mode);
 
+        this.setData(this.dataView.getText().toString(), true);
+
         this.dataView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
@@ -24,7 +27,11 @@ public class SendActivity extends TranscodingActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                setData(dataView.getText().toString(), !swt.isChecked());
+                //TODO: remove the need for the next line
+                if (swt.isChecked()) {
+                    Log.i("Base64 Edit", "Operation not implemented yet");
+                };
+                setData(dataView.getText().toString().trim(), !swt.isChecked());
             }
         });
     }

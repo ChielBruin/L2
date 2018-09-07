@@ -47,13 +47,20 @@ public class ReceiveActivity  extends TranscodingActivity {
     private void handleSendText(Intent intent) {
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
         if (sharedText != null) {
+            sharedText = sharedText.trim();
+
             //If its valid Base64 it can be both, otherwise it must be plaintext
             if (sharedText.matches("[A-Za-z0-1_-]+")) {
                 String query = "We are not sure what kind of data this is, please select the correct data type.";
                 BinaryDialogWrapper.ask(this, query, "text", "binary", new BinaryDialogListener<String>() {
                     @Override
-                    public void dialogResult(String data, boolean positive) {
-                        setData(data, positive);
+                    public void dialogPositiveResult(String data, String option) {
+                        setData(data, true);
+                    }
+
+                    @Override
+                    public void dialogNegativeResult(String data, String option) {
+                        setData(data, false);
                     }
                 }, sharedText);
             } else {
