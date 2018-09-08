@@ -29,6 +29,7 @@ public class AskKeyDialog extends Dialog implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //TODO: Keys in Base64 should be allowed as it is otherwise impossible to enter certain keys
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_ask_key);
         final EditText keyField = findViewById(R.id.passwordField);

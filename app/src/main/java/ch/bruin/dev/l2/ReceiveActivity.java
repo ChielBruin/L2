@@ -42,8 +42,6 @@ public class ReceiveActivity  extends TranscodingActivity {
         }
     }
 
-
-
     private void handleSendText(Intent intent) {
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
         if (sharedText != null) {
