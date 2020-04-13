@@ -1,107 +1,84 @@
 package ch.bruin.dev.l2;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import ch.bruin.dev.l2.selectorDialog.BinaryDialogListener;
-import ch.bruin.dev.l2.selectorDialog.BinaryDialogWrapper;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
+import java.security.InvalidKeyException;
 
-public class ReceiveActivity  extends TranscodingActivity {
+import ch.bruin.dev.l2.Crypto.CryptoMethod;
+import ch.bruin.dev.l2.selectorDialog.CryptoSelectDialog;
+
+public class ReceiveActivity  extends AppCompatActivity implements CryptoSelectionCallback {
+    private TextView dataView;
+    private Button decodeButton;
+
+    private byte[] bytes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receive);
-
-        this.setButtons(R.id.btn_encode, R.id.btn_decode);
-        this.setDataView(R.id.rx_data);
-        this.setSwitch(R.id.swt_display_mode);
+        dataView = findViewById(R.id.rx_data);
+        decodeButton = findViewById(R.id.btn_decode);
 
         // Get intent, action and MIME type
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
 
-        if (Intent.ACTION_SEND.equals(action) && type != null) {
-            if ("text/plain".equals(type)) {
-                handleSendText(intent);
-            } else if (type.startsWith("image/")) {
-                handleSendImage(intent);
-            }
-        } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
-            if (type.startsWith("image/")) {
-                handleSendMultipleImages(intent);
-            }
+        if (Intent.ACTION_SEND.equals(action) && "text/plain".equals(type)) {
+            handleSendText(intent);
+            updateDataView();
         } else {
-            // Handle other intents, such as being started from the home screen
+            Toast.makeText(getApplicationContext(), "Unsupported media type", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void handleSendText(Intent intent) {
+    private void updateDataView() {
+        dataView.setText(TranscodingHelper.toBase64(bytes));
+    }
+
+    private byte[] handleSendText(Intent intent) {
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
         if (sharedText != null) {
             sharedText = sharedText.trim();
-            //If its valid Base64 it can be both, otherwise it must be plaintext
             if (sharedText.matches("[A-Za-z0-9_-]+")) {
-                String query = "We are not sure what kind of data this is, please select the correct data type.";
-                BinaryDialogWrapper.ask(this, query, "text", "binary", new BinaryDialogListener<String>() {
-                    @Override
-                    public void dialogPositiveResult(String data, String option) {
-                        setData(data, true);
-                    }
-
-                    @Override
-                    public void dialogNegativeResult(String data, String option) {
-                        setData(data, false);
-                    }
-                }, sharedText);
+                bytes = TranscodingHelper.fromBase64(sharedText);
             } else {
-                setData(sharedText, true);
+                bytes = sharedText.getBytes();
             }
+            return bytes;
         }
+        return new byte[0];
     }
 
-    private void handleSendImage(Intent intent) {
-        Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-        if (imageUri != null) {
-            // Update UI to reflect image being shared
+    public void onDecode(View view) {
+        CryptoSelectDialog newFragment = new CryptoSelectDialog();
+        newFragment.setCallback(this);
+        newFragment.setParentActivity(this);
+        newFragment.show(this.getSupportFragmentManager(), "dialog");
+    }
+
+    @Override
+    public void onSelect(CryptoMethod method, byte[] key) {
+        byte[] decoded;
+        if (key == null) {
             try {
-                setData(readBytes(imageUri), false);
-            } catch (IOException e) {
-                e.printStackTrace();
+                decoded = method.decodeWithoutKey(bytes);
+            } catch (InvalidKeyException e) {
+                decoded = new byte[0];
+                Toast.makeText(getApplicationContext(), "Invalid key", Toast.LENGTH_SHORT).show();
             }
+        } else {
+            decoded = method.decode(bytes, key);
         }
-    }
-
-    private void handleSendMultipleImages(Intent intent) {
-        ArrayList<Uri> imageUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
-        if (imageUris != null) {
-            // Update UI to reflect multiple images being shared
-            //TODO
-        }
-    }
-
-    private byte[] readBytes(Uri uri) throws IOException {
-        // this dynamically extends to take the bytes you read
-        InputStream inputStream = getContentResolver().openInputStream(uri);
-        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-
-        // this is storage overwritten on each iteration with bytes
-        int bufferSize = 1024;
-        byte[] buffer = new byte[bufferSize];
-
-        // we need to know how may bytes were read to write them to the byteBuffer
-        int len = 0;
-        while ((len = inputStream.read(buffer)) != -1) {
-            byteBuffer.write(buffer, 0, len);
-        }
-
-        // and then we can return your byte array.
-        return byteBuffer.toByteArray();
+        dataView.setText(new String(decoded));
+        decodeButton.setVisibility(View.GONE);
     }
 }

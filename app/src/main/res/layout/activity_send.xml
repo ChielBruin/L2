@@ -5,65 +5,32 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="ch.bruin.dev.l2.SendActivity">
+        tools:context="ch.bruin.dev.l2.SendActivity"
+        android:layout_margin="10dp">
 
     <TextView
             android:text="Send Data"
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display2"/>
-
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:layout_alignBottom="@+id/title"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/switcher">
-        <Switch
-                android:text="Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/swt_display_mode"
-        />
-        <TextView
-                android:text="Binary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Material"
-        />
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="horizontal"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+            android:textAlignment="center"/>
+    <Button
+            android:text="Encode"
             android:layout_width="match_parent"
-            android:id="@+id/buttonbar"
             android:layout_height="wrap_content"
+            android:id="@+id/btn_encode"
+            android:onClick="onEncode"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true">
-        <Button
-                android:text="Encode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_encode"
-                android:onClick="onEncode" android:layout_weight="1"/>
-        <Button
-                android:text="Decode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_decode"
-                android:onClick="onDecode" android:layout_weight="1"/>
-    </LinearLayout>
+            android:layout_alignParentEnd="true"/>
 
     <EditText
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@id/switcher"
-            android:layout_above="@id/buttonbar"
+            android:layout_above="@id/btn_encode"
             android:inputType="textLongMessage"
             android:hint="Type here"
             android:ems="10"
-            android:id="@+id/textField"/>
+            android:id="@+id/tx_data"/>
 
 </RelativeLayout>

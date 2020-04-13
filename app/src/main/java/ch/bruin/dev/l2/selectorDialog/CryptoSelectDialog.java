@@ -11,13 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
 import ch.bruin.dev.l2.Crypto.CryptoMethod;
+import ch.bruin.dev.l2.CryptoSelectionCallback;
 import ch.bruin.dev.l2.R;
-import ch.bruin.dev.l2.TranscodingHelper;
 
 import java.io.Serializable;
 
 public class CryptoSelectDialog extends DialogFragment implements Serializable {
-    private TranscodingHelper callback;
+    private CryptoSelectionCallback callback;
     private AppCompatActivity parentActivity;
 
     @Override
@@ -70,7 +70,7 @@ public class CryptoSelectDialog extends DialogFragment implements Serializable {
             AskKeyDialog dialog = new AskKeyDialog(method, callback, parentActivity);
             dialog.show();
         } else {
-            callback.onMethodSelected(method);
+            callback.onSelect(method, null);
         }
     }
 
@@ -78,7 +78,7 @@ public class CryptoSelectDialog extends DialogFragment implements Serializable {
         this.parentActivity = parentActivity;
     }
 
-    public void setCallback(TranscodingHelper callback) {
+    public void setCallback(CryptoSelectionCallback callback) {
         this.callback = callback;
     }
 }

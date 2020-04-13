@@ -27,19 +27,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_below="@+id/hdr_received_data"
                 android:layout_alignParentEnd="true"
-                android:id="@+id/switcher">
-            <Switch
-                    android:text="Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/swt_display_mode"
-            />
-            <TextView
-                    android:text="Binary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@android:style/TextAppearance.Material"
-            />
-        </LinearLayout>
+                android:id="@+id/switcher"/>
 
         <TextView
                 android:text="Data!"
@@ -61,16 +49,8 @@
                 android:layout_alignParentBottom="true">
 
             <Button
-                    android:text="Encode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btn_encode"
-                    android:layout_weight="1" android:onClick="onEncode"
-                    style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
-
-            <Button
                     android:text="Decode"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_decode"
                     android:layout_weight="1" android:onClick="onDecode"

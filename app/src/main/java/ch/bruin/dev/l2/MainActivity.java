@@ -17,4 +17,9 @@ public class MainActivity extends AppCompatActivity {
         Intent SendActivityIntent = new Intent(this, SendActivity.class);
         startActivity(SendActivityIntent);
     }
+
+    public void onAbout(View view) {
+        Intent AboutActivityIntent = new Intent(this, AboutActivity.class);
+        startActivity(AboutActivityIntent);
+    }
 }

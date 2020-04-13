@@ -71,7 +71,7 @@ public class TranscodingHelper {
 
     private void showSelectionDialog() {
         CryptoSelectDialog newFragment = new CryptoSelectDialog();
-        newFragment.setCallback(this);
+//        newFragment.setCallback(this);
         newFragment.setParentActivity(rootActivity);
         newFragment.show(rootActivity.getSupportFragmentManager(), "dialog");
     }
@@ -98,10 +98,6 @@ public class TranscodingHelper {
 
     public static byte[] fromBase64(String b64) {
         return Base64.decode(b64.getBytes(), B64_FLAGS);
-    }
-
-    public static String stringFromBase64(String b64) {
-        return Base64.encodeToString(b64.getBytes(), B64_FLAGS);
     }
 
     public static String toBase64(byte[] data) {
